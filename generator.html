@@ -110,16 +110,10 @@ function loadState() {
  * Load state from metadata.json textarea
  */
 function loadFile(url, cb) {
-    $.ajax({
-      dataType: "text",
-      url: url,
-      success: function(data, status, cb) {
-         if (status == 200) {
-            cb(data);
-         } else {
-            alert("Error loading file: " + url)
-         }
-      }
+    $.get(url, function(data) {
+        cb(data);
+    }, "text").fail(function() {
+        alert("Error loading file: " + url);
     });
 }
 
