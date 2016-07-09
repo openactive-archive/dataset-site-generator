@@ -1,0 +1,19 @@
+{
+  "dataset-site-url": "",
+  "title": "British Cycling Sky Ride Sessions",
+  "description": "Session data from the goskyride.com site",
+  "publisher-name": "British Cycling",
+  "publisher-url": "https://www.britishcycling.org.uk",
+  "keyword-1": "Cycling",
+  "keyword-2": "Sky Ride",
+  "created": "2014-07-20",
+  "data-url": "http://api.britishcycling.com/openactive/rpde",
+  "documentation-url": "https://github.com/britishcycling-oa/opendata",
+  "rpde-version": "0.2.3",
+  "license-name": "Creative Commons Attribution Licence (CC-BY v4.0)",
+  "license-url": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution-text": "British Cycling Sky Ride",
+  "attribution-url": "",
+  "mailchimp": "require([\"mojo/signup-forms/Loader\"], function(L) { L.start({\"baseUrl\":\"mc.us13.list-manage.com\",\"uuid\":\"9e6648557f84731796a4ac873\",\"lid\":\"2167da53bb\"}) })",
+  "copyright-notice": ""
+}

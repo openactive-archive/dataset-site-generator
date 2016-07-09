@@ -1,0 +1,295 @@
+<html>
+<!--
+    Nick Evans / imin
+    imin.co | @nickevans / @_imin_
+    For openactive.io
+    Free for personal and commercial use under the CC-BY v4.0 license (https://creativecommons.org/licenses/by/4.0/)
+-->
+<head><script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+<!--<![endif]-->
+
+<script type="text/javascript">
+
+if(!("valueAsDate" in HTMLInputElement.prototype)){
+  Object.defineProperty(HTMLInputElement.prototype, "valueAsDate", {
+    get: function(){
+      var d = this.value.split(/\D/);
+      return new Date(d[0], --d[1], d[2]);
+    },
+    set: function(d){
+      var day = ("0" + d.getDate()).slice(-2),
+          month = ("0" + (d.getMonth() + 1)).slice(-2),
+          datestr = d.getFullYear()+"-"+month+"-"+day;
+      this.value = datestr;
+    }
+  });
+}
+
+function escapeRegExp(str) {
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+
+
+
+var INPUTS = "#inputdata input, #inputdata select, #inputdata textarea";
+
+/* 
+ * Generate index.html
+ */
+function generate() {
+    var inputText = $( "#template" ).val();
+
+    $( INPUTS ).each(function() {
+        var id = $( this ).attr('id');
+        var value = $( this ).val();
+        if ($( this ).attr('type') == "date") {
+            var humanReadableDate = value && "";
+            var machineReadableDate = value ? document.getElementById(id).valueAsDate.toISOString() : "";
+            inputText = replaceAll(inputText,"{"+id+"-human}",humanReadableDate);
+            inputText = replaceAll(inputText,"{"+id+"-machine}",machineReadableDate);
+        } else {
+            inputText = replaceAll(inputText,"{"+id+"}",value);
+        }
+    });
+
+    $( "#output" ).val(inputText);
+}
+
+/* 
+ * Replace empty metadata on first run
+ */
+function firstRun() {
+    if (!location.origin) location.origin = location.protocol + "//" + location.host;
+    if ($( "#dataset-site-url" ).val() == "") $( "#dataset-site-url" ).val(location.origin + "/");
+    if ($( "#attribution-url" ).val() == "") $( "#attribution-url" ).val(location.origin + "/");
+}
+
+/* 
+ * Save state to metadata.json textarea
+ */
+function saveState() {
+    var state = {};
+
+    $( INPUTS ).each(function() {
+        var id = $( this ).attr('id');
+        var value = $( this ).val();
+        state[id] = value;
+    });
+
+    $( "#state" ).val(JSON.stringify(state, null, 2));
+}
+
+/* 
+ * Load state from metadata.json textarea
+ */
+function loadState() {
+    var stateSerialised = $( "#state" ).val();
+
+    var state = null;
+    try {
+        state = JSON.parse(stateSerialised);
+    }
+    catch(err) {
+        alert("The file that was pasted in the 'metadata.json' box is not valid");
+    }
+    $.each( state, function( key, value ) {
+        $('#' + key).val(value);
+    });
+}
+
+/* 
+ * Load state from metadata.json textarea
+ */
+function loadFile(url, cb) {
+    $.ajax({
+      dataType: "text",
+      url: url,
+      success: function(data, status, cb) {
+         if (status == 200) {
+            cb(data);
+         } else {
+            alert("Error loading file: " + url)
+         }
+      }
+    });
+}
+
+/* 
+ * Extract code from mailchimp textbox
+ */
+function extractMailchimp() {
+    var textBox = $( "#mailchimp" );
+    var value = textBox.val();
+    if (value) {
+        var rx = /require.*}\) }\)/g;
+        var arr = rx.exec(value);
+        if (arr) {
+            value = arr[0]; 
+            textBox.val(value);
+        } else {
+            alert ("Invalid Mailchimp code, please ensure you are clicking 'View Code' in the Subscriber Popup feature within the 'Signup Forms' section of a List");
+            textBox.val("");
+        }
+    }
+}
+
+/*
+ * Ensure dataset pages ends in a "/"
+ */
+ function datasetBaseUrl() {
+    var textBox = $( "#dataset-site-url" );
+    var value = textBox.val();
+    if (value != "" && !value.endsWith("/")) {
+        textBox.val(value + "/");
+    }
+}
+
+/* 
+ * On Page Load
+ */
+$(function() {
+    //Load template first
+    loadFile("template.html", function(data) {
+        $( "#template" ).val( data );
+
+        //When template has loaded, load state
+        loadFile("metadata.json", function(data) {
+            $( "#state" ).val( data );
+            loadState();
+            firstRun();
+            saveState();
+            generate();
+        });
+    });
+
+    //Set up events
+    $( INPUTS ).blur(function () {
+        datasetBaseUrl();
+        extractMailchimp();
+        generate();
+        saveState();
+    });
+    $( "#state" ).blur(function () {
+        loadState();
+        generate();
+    });
+})    
+
+</script>
+<style>
+    body { max-width: 700px; margin: 20px; }
+    label { padding-top: 20px; }
+    textarea {height: 200px;}
+</style>
+</head>
+<body>
+
+
+
+<h1><a href="https://www.openactive.io/"><img src="https://www.openactive.io/assets/openactive-logo-small.png" width="180" alt="" /></a> Dataset Site Generator</h1>
+
+<form class="pure-form pure-form-stacked">
+    <fieldset id="inputdata">
+        <legend>Dataset Page Fields</legend>
+
+        <label for="dataset-site-url">Dataset Site URL</label>
+        <input class="pure-input-1" id="dataset-site-url" type="url" placeholder="https://britishcycling-oa.github.io/">
+
+
+        <label for="title">Title of dataset</label>
+        <input class="pure-input-1" id="title" placeholder="British Cycling Sky Ride Sessions">
+
+        <label for="description">Description</label>
+        <input class="pure-input-1" id="description" placeholder="Session data from the goskyride.com site">
+
+        <label for="publisher-name">Publisher Name</label>
+        <input class="pure-input-1" id="publisher-name" placeholder="British Cycling">
+
+        <label for="publisher-url">Publisher URL</label>
+        <input class="pure-input-1" id="publisher-url" placeholder="https://www.britishcycling.org.uk" />
+
+        <label for="keyword-1">Keyword 1</label>
+        <input class="pure-input-1" id="keyword-1" placeholder="Cycling">
+
+        <label for="keyword-2">Keyword 2</label>
+        <input class="pure-input-1" id="keyword-2" placeholder="Sky Ride">
+
+
+        <label for="created">Date of first record</label>
+        <input class="pure-input-1" id="created" type="date" placeholder="">
+
+        <label for="data-url">Openactive RPDE Endpoint URL</label>
+        <input class="pure-input-1" id="data-url" type="url" placeholder="http://api.ridesociallondon.co.uk/api/EventFeed">
+
+        <label for="documentation-url">Documentation URL (e.g. GitHub repository)</label>
+        <input class="pure-input-1" id="documentation-url" type="url" placeholder="https://github.com/britishcycling-oa/opendata">
+
+
+        <label for="rpde-version">Openactive RPDE Version</label>
+        <input class="pure-input-1" id="rpde-version" placeholder="0.2.3">
+
+
+        <label for="license-name">License Name</label>
+        <input class="pure-input-1" id="license-name" placeholder="Creative Commons Attribution Licence (CC-BY v4.0)" value="Creative Commons Attribution Licence (CC-BY v4.0)">
+
+        <label for="license-url">License URL</label>
+        <input class="pure-input-1" id="license-url" placeholder="https://creativecommons.org/licenses/by/4.0/" value="https://creativecommons.org/licenses/by/4.0/">
+
+        <label for="attribution-text">Attribution Text (shown on apps and websites that use the data)</label>
+        <input class="pure-input-1" id="attribution-text" placeholder="British Cycling">
+
+        <label for="attribution-url">Attribution URL (linked from apps and websites that use the data)</label>
+        <input class="pure-input-1" id="attribution-url" type="url" placeholder="https://britishcycling-oa.github.io">
+
+        <label for="mailchimp">Mailchimp Code</label>
+        <textarea class="pure-input-1" id="mailchimp"></textarea>
+
+        <label for="copyright-notice">Copyright HTML</label>
+        <textarea class="pure-input-1" id="copyright-notice"></textarea>
+
+        <button type="button" id="convert" class="pure-button pure-button-primary">Transform</button>
+
+    </fieldset>
+
+    <hr />
+    <br />
+
+    <fieldset>
+        <legend>Generated Files (to paste into GitHub)</legend>
+
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="output"><strong>index.html</strong> - Generated Webpage Code</label>
+                <textarea class="pure-u-23-24" id="output"></textarea>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="state"><strong>metadata.json</strong> - Page Generator Metadata</label>
+                <textarea class="pure-u-23-24" id="state">
+                </textarea>
+            </div>
+        </div>
+    </fieldset>
+
+    <hr />
+    <br />
+
+    <fieldset>
+        <label for="template">Template HTML (loaded from file, no need to edit)</label>
+        <textarea class="pure-input-1" id="template"></textarea>
+    </fieldset>
+
+
+
+</form>
+
+</body>
+</html>
