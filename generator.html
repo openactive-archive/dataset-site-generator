@@ -114,6 +114,11 @@ function loadFile(url, cb) {
         cb(data);
     }, "text").fail(function() {
         alert("Error loading file: " + url);
+
+        //In the case of error, enable manual mode
+        setupForm();
+        showForm();
+        showTemplateManualEntry()
     });
 }
 
@@ -162,9 +167,15 @@ function setupForm() {
         loadState();
         generate();
     });
+}
 
+function showForm() {
     $( "#content" ).show();
     $( "#loading" ).hide();
+}
+
+function showTemplateManualEntry() {
+    $( "#templateManual" ).show();
 }
 
 /* 
@@ -183,6 +194,7 @@ $(function() {
             saveState();
             generate();
             setupForm();
+            showForm();
         });
     });
 })    
@@ -202,74 +214,69 @@ $(function() {
 
 <div id="loading">Loading...</div>
 
-<form id="content" style="display: none;" class="pure- form pure-form-stacked">
+<form id="content" style="display: none;" class="pure-form pure-form-stacked">
     <fieldset id="inputdata">
-        <legend>Dataset Page Fields</legend>
+        <h2>Dataset Page Fields</h2>
 
-        <label for="dataset-site-url">Dataset Site URL</label>
+        <label for="dataset-site-url"><strong>Dataset Site URL</strong> (the GitHub pages site you are creating)</label>
         <input class="pure-input-1" id="dataset-site-url" type="url" placeholder="https://britishcycling-oa.github.io/">
 
 
-        <label for="title">Title of dataset</label>
+        <label for="title"><strong>Title of Dataset</strong> (keep this as concise as possible)</label>
         <input class="pure-input-1" id="title" placeholder="British Cycling Sky Ride Sessions">
 
-        <label for="description">Description</label>
+        <label for="description"><strong>Description</strong></label>
         <input class="pure-input-1" id="description" placeholder="Session data from the goskyride.com site">
 
-        <label for="publisher-name">Publisher Name</label>
+        <label for="publisher-name"><strong>Publisher Name</strong> (usually your organisation's name)</label>
         <input class="pure-input-1" id="publisher-name" placeholder="British Cycling">
 
-        <label for="publisher-url">Publisher URL</label>
+        <label for="publisher-url"><strong>Publisher URL</strong> (usually your organisation's website)</label>
         <input class="pure-input-1" id="publisher-url" placeholder="https://www.britishcycling.org.uk" />
 
-        <label for="keyword-1">Keyword 1</label>
+        <label for="keyword-1"><strong>Keywords</strong> (to help people find your data)</label>
         <input class="pure-input-1" id="keyword-1" placeholder="Cycling">
-
-        <label for="keyword-2">Keyword 2</label>
         <input class="pure-input-1" id="keyword-2" placeholder="Sky Ride">
 
-
-        <label for="created">Date of first record</label>
-        <input class="pure-input-1" id="created" type="date" placeholder="">
-
-        <label for="data-url">Openactive RPDE Endpoint URL</label>
+        <label for="data-url"><strong>Openactive RPDE Data Feed URL</strong></label>
         <input class="pure-input-1" id="data-url" type="url" placeholder="http://api.ridesociallondon.co.uk/api/EventFeed">
 
-        <label for="documentation-url">Documentation URL (e.g. GitHub repository)</label>
+        <label for="created"><strong>Date of Publishing</strong> (the date your Openactive RPDE Data Feed URL went live with the correct license, use today's date if you are creating the license today)</label>
+        <input class="pure-input-1" id="created" type="date" placeholder="">
+
+        <label for="documentation-url"><strong>Documentation URL</strong> (e.g. GitHub repository, see <a href="https://github.com/openactive/dataset-site-generator/wiki/Creating-Dataset-Documentation">this guide</a> for more information)</label>
         <input class="pure-input-1" id="documentation-url" type="url" placeholder="https://github.com/britishcycling-oa/opendata">
 
 
-        <label for="rpde-version">Openactive RPDE Version</label>
+        <label for="rpde-version"><strong>Openactive RPDE Version</strong> (the version of <a href="https://github.com/openactive/realtime-paged-data-exchange">Openactive RPDE</a> used by your developers).</label>
         <input class="pure-input-1" id="rpde-version" placeholder="0.2.3">
 
 
-        <label for="license-name">License Name</label>
+        <label for="license-name"><strong>License Name</strong> - recommended "Creative Commons Attribution Licence (CC-BY v4.0)"</label>
         <input class="pure-input-1" id="license-name" placeholder="Creative Commons Attribution Licence (CC-BY v4.0)" value="Creative Commons Attribution Licence (CC-BY v4.0)">
 
-        <label for="license-url">License URL</label>
+        <label for="license-url"><strong>License URL</strong> - recommended "https://creativecommons.org/licenses/by/4.0/"</label>
         <input class="pure-input-1" id="license-url" placeholder="https://creativecommons.org/licenses/by/4.0/" value="https://creativecommons.org/licenses/by/4.0/">
 
-        <label for="attribution-text">Attribution Text (shown on apps and websites that use the data)</label>
+        <label for="attribution-text"><strong>Attribution Text</strong> (shown on apps and websites that use the data)</label>
         <input class="pure-input-1" id="attribution-text" placeholder="British Cycling">
 
-        <label for="attribution-url">Attribution URL (linked from apps and websites that use the data)</label>
+        <label for="attribution-url"><strong>Attribution URL</strong> (linked from apps and websites that use the data)</label>
         <input class="pure-input-1" id="attribution-url" type="url" placeholder="https://britishcycling-oa.github.io">
 
-        <label for="mailchimp">Mailchimp Code</label>
+        <label for="mailchimp"><strong>Mailchimp Code</strong> (see <a href="https://github.com/openactive/dataset-site-generator/wiki/Setting-up-Mailchimp">this guide</a>)</label>
         <textarea class="pure-input-1" id="mailchimp"></textarea>
 
-        <label for="copyright-notice">Copyright HTML</label>
+        <label for="copyright-notice"><strong>Copyright HTML</strong> (required if your selected background image is not owned by you)</label>
         <textarea class="pure-input-1" id="copyright-notice"></textarea>
-
-        <button type="button" id="convert" class="pure-button pure-button-primary">Transform</button>
-
     </fieldset>
 
+    <br />
     <hr />
     <br />
 
     <fieldset>
-        <legend>Generated Files (to paste into GitHub)</legend>
+        <h2>Generated Files (to paste into GitHub)</h2>
 
         <div class="pure-g">
             <div class="pure-u-1 pure-u-md-1-2">
@@ -278,15 +285,19 @@ $(function() {
             </div>
             <div class="pure-u-1 pure-u-md-1-2">
                 <label for="state"><strong>metadata.json</strong> - Page Generator Metadata</label>
-                <textarea class="pure-u-23-24" id="state">
-                </textarea>
+                <textarea class="pure-u-23-24" id="state"></textarea>
             </div>
         </div>
     </fieldset>
 
 
-    <fieldset style="display: none;">
-        <label for="template">Template HTML (loaded from file, no need to edit)</label>
+    <fieldset id="templateManual" style="display: none;">
+        <br />
+        <hr />
+        <br />
+        <h2>Manual Entry</h2>
+        <div>When editing this form locally, the ajax fetch of the template will fail. Instead simply copy the contents of template.html into the box below, and the contents of metadata.json into the right-hand box above.</div>
+        <label for="template">Template HTML (paste <strong>template.html</strong> in here)</label>
         <textarea class="pure-input-1" id="template"></textarea>
     </fieldset>
 
