@@ -147,6 +147,25 @@ function extractMailchimp() {
     }
 }
 
+/*
+ * Set up form and unhide it
+ */
+function setupForm() {
+    //Set up events
+    $( INPUTS ).blur(function () {
+        datasetBaseUrl();
+        extractMailchimp();
+        generate();
+        saveState();
+    });
+    $( "#state" ).blur(function () {
+        loadState();
+        generate();
+    });
+
+    $( "#content" ).show();
+}
+
 /* 
  * On Page Load
  */
@@ -162,19 +181,8 @@ $(function() {
             firstRun();
             saveState();
             generate();
+            setupForm();
         });
-    });
-
-    //Set up events
-    $( INPUTS ).blur(function () {
-        datasetBaseUrl();
-        extractMailchimp();
-        generate();
-        saveState();
-    });
-    $( "#state" ).blur(function () {
-        loadState();
-        generate();
     });
 })    
 
@@ -191,7 +199,9 @@ $(function() {
 
 <h1><a href="https://www.openactive.io/"><img src="https://www.openactive.io/assets/openactive-logo-small.png" width="180" alt="" /></a> Dataset Site Generator</h1>
 
-<form class="pure-form pure-form-stacked">
+<div id="loading">Loading...</div>
+
+<form id="content" style="display: none;" class="pure-form pure-form-stacked">
     <fieldset id="inputdata">
         <legend>Dataset Page Fields</legend>
 

@@ -18,7 +18,7 @@
 		<title>{title}</title>
 
 		<meta name="title" content="{title}" />
-		<meta name="identifier" content="{dataset-page-url}" />
+		<meta name="identifier" content="{dataset-site-url}" />
 		<meta name="Keywords" content="{keyword-1}, {keyword-2}, Openactive" />
 		<meta name="Description" content="{description}; published using Openactive RPDE v{rpde-version}." />
 		<meta name="language" content="English" />
@@ -26,8 +26,8 @@
 		<meta property="og:title" content="{title}" />
 		<meta property="og:description" content="{description}" />
 		<meta property="og:locale" content="en_GB" />
-		<meta property="og:url" content="{dataset-page-url}" />
-		<meta property="og:image" content="{dataset-page-url}images/logo.png" />
+		<meta property="og:url" content="{dataset-site-url}" />
+		<meta property="og:image" content="{dataset-site-url}images/logo.png" />
 
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,7 +40,7 @@
 	<body class="is-loading">
 
 		<!-- Wrapper -->
-			<div id="wrapper" typeof="dcat:Dataset" resource="{dataset-page-url}">
+			<div id="wrapper" typeof="dcat:Dataset" resource="{dataset-site-url}">
 
 				<!-- Main -->
 					<section id="main">
@@ -48,7 +48,7 @@
 				            <div property="dct:publisher" 
 				                 resource="{publisher-url}">
 				                <a href="{publisher-url}" about="{publisher-url}" property="foaf:homepage">
-				                    <span class="avatar" property="foaf:name" content="{publisher-name}"><img src="{dataset-page-url}images/logo.png" alt=""/></span>
+				                    <span class="avatar" property="foaf:name" content="{publisher-name}"><img src="{dataset-site-url}images/logo.png" alt=""/></span>
 				                </a>
 				            </div>
 							
