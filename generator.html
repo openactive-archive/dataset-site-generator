@@ -1,11 +1,15 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <!--
     Nick Evans / imin
     imin.co | @nickevans / @_imin_
     For openactive.io
     Free for personal and commercial use under the CC-BY v4.0 license (https://creativecommons.org/licenses/by/4.0/)
 -->
-<head><script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<head>
+<title>Openactive Dataset Site Generator</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webshim/1.15.10/minified/polyfiller.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
 <!--[if lte IE 8]>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-old-ie-min.css">
@@ -15,6 +19,8 @@
 <!--<![endif]-->
 
 <script type="text/javascript">
+
+webshims.polyfill('forms es5');
 
 if(!("valueAsDate" in HTMLInputElement.prototype)){
   Object.defineProperty(HTMLInputElement.prototype, "valueAsDate", {
@@ -242,7 +248,7 @@ $(function() {
         <input class="pure-input-1" id="data-url" type="url" placeholder="http://api.ridesociallondon.co.uk/api/EventFeed">
 
         <label for="created"><strong>Date of Publishing</strong> (the date your Openactive RPDE Data Feed URL went live with the correct license, use today's date if you are creating the license today)</label>
-        <input class="pure-input-1" id="created" type="date" placeholder="">
+        <input class="pure-input-1" id="created" type="date" >
 
         <label for="documentation-url"><strong>Documentation URL</strong> (e.g. GitHub repository, see <a href="https://github.com/openactive/dataset-site-generator/wiki/Creating-Dataset-Documentation">this guide</a> for more information)</label>
         <input class="pure-input-1" id="documentation-url" type="url" placeholder="https://github.com/britishcycling-oa/opendata">
