@@ -164,6 +164,7 @@ function setupForm() {
     });
 
     $( "#content" ).show();
+    $( "#loading" ).hide();
 }
 
 /* 
@@ -201,7 +202,7 @@ $(function() {
 
 <div id="loading">Loading...</div>
 
-<form id="content" style="display: none;" class="pure-form pure-form-stacked">
+<form id="content" style="display: none;" class="pure- form pure-form-stacked">
     <fieldset id="inputdata">
         <legend>Dataset Page Fields</legend>
 
@@ -283,15 +284,11 @@ $(function() {
         </div>
     </fieldset>
 
-    <hr />
-    <br />
 
-    <fieldset>
+    <fieldset style="display: none;">
         <label for="template">Template HTML (loaded from file, no need to edit)</label>
         <textarea class="pure-input-1" id="template"></textarea>
     </fieldset>
-
-
 
 </form>
 
