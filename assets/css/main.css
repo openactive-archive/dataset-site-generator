@@ -874,3 +874,8 @@
 	max-width: 400px;
 	display: inline-block;
 }
+
+.logo {
+	max-width: 230px;
+	max-height: 80px;
+}
