@@ -62,6 +62,13 @@ function generate() {
             var machineReadableDate = value ? document.getElementById(id).valueAsDate.toISOString() : "";
             inputText = replaceAll(inputText,"{"+id+"-human}",humanReadableDate);
             inputText = replaceAll(inputText,"{"+id+"-machine}",machineReadableDate);
+        } else if ($( this ).attr('id') == "odi-certificate-number") {
+            if (value == "") {
+                inputText = replaceAll(inputText,"{odi-certificate-show}","none");
+            } else {
+                inputText = replaceAll(inputText,"{odi-certificate-show}","inline-block");
+            }
+            inputText = replaceAll(inputText,"{odi-certificate-number}",value);
         } else {
             inputText = replaceAll(inputText,"{"+id+"}",value);
         }
@@ -147,6 +154,30 @@ function extractMailchimp() {
     }
 }
 
+/* 
+ * Extract code from mailchimp textbox
+ */
+function extractOdiCertificateNumber() {
+    var textBox = $( "#odi-certificate-number" );
+    var value = textBox.val();
+    if (value) {
+        var numrx = /^[0-9]*$/g;
+        var rx = /datasets\/([0-9]*)\/certificate/g;
+        var numarr = numrx.exec(value);
+        var arr = rx.exec(value);
+        if (numarr) {
+            //Already a number in the box, do nothing
+        } else if (arr && arr.length == 2) {
+            //Extract the number and put it in the box
+            value = arr[1]; 
+            textBox.val(value);
+        } else {
+            alert ("Invalid Open Data Certificate code, please ensure you are copying the Badge, Certificate, or URL from the 'Embed' button in your Certificate page");
+            textBox.val("");
+        }
+    }
+}
+
 /*
  * Ensure dataset pages ends in a "/"
  */
@@ -166,6 +197,7 @@ function setupForm() {
     $( INPUTS ).blur(function () {
         datasetBaseUrl();
         extractMailchimp();
+        extractOdiCertificateNumber();
         generate();
         saveState();
     });
@@ -275,6 +307,9 @@ $(function() {
 
         <label for="copyright-notice"><strong>Copyright HTML</strong> (required if your selected background image is not owned by you)</label>
         <textarea class="pure-input-1" id="copyright-notice"></textarea>
+
+        <label for="odi-certificate-number"><strong>Open Data Certificate</strong> (see <a href="https://github.com/openactive/dataset-site-generator/wiki/Open-Data-Certificates">this guide</a>)</label>
+        <textarea class="pure-input-1" id="odi-certificate-number"></textarea>
     </fieldset>
 
     <br />
