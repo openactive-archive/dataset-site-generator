@@ -18,6 +18,11 @@ git config user.email "hello@openactive.io"
 
 echo "metadata.json:"
 cat metadata.json
+
+echo ""
+echo "Git version..."
+git --version
+
 echo ""
 echo "Performing merge..."
 

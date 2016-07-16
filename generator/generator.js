@@ -5,7 +5,7 @@
 function isoDateFromString(str) {
     if (str) {
         var d = str.split(/\D/);
-        return (new Date(Date.UTC(d[0], --d[1], d[2])).toISOString();
+        return (new Date(Date.UTC(d[0], --d[1], d[2]))).toISOString();
     } else {
         return "";
     }
