@@ -13,7 +13,7 @@ cd ${DIR_NAME}
 git clone "https://${GH_TOKEN}@${GH_REF}"
 cd ${REPO_NAME}
 
-git config user.name "Dataset Site Generator Update Bot"
+git config user.name "Openactive Bot"
 git config user.email "hello@openactive.io"
 
 echo "metadata.json:"
@@ -40,11 +40,11 @@ echo "Regenerating index.html..."
 echo ""
 echo "Committing index.html..."
 git add index.html
-git commit -m "Regeneration of index.html by DSG Update Bot"
+git commit -m "Regeneration of index.html by Openactive Bot"
 
 echo ""
 echo "Pushing..."
-
+git push
 
 echo ""
 
