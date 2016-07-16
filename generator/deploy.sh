@@ -13,8 +13,10 @@ cd ${DIR_NAME}
 git clone "https://${GH_TOKEN}@${GH_REF}"
 cd ${REPO_NAME}
 
+git config user.name "Dataset Site Generator Update Bot"
+git config user.email "hello@openactive.io"
 
-echo "metadata.json"
+echo "metadata.json:"
 cat metadata.json
 echo ""
 echo "Performing merge..."
@@ -30,7 +32,21 @@ git remote add upstream git@github.com:openactive/dataset-site-generator.git
 git fetch upstream
 git pull upstream master -Xtheirs
 
+echo ""
+echo "Regenerating index.html..."
 
+../../../generator-standalone.js --template generator/template.html --metadata metadata.json --output index.html
+
+echo ""
+echo "Committing index.html..."
+git add index.html
+git commit -m "Regeneration of index.html by DSG Update Bot"
+
+echo ""
+echo "Pushing..."
+
+
+echo ""
 
 exit 0
 

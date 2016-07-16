@@ -1,22 +1,39 @@
 /* 
- * Generate index.html
+ * Generator for index.html
  */
+
+function isoDateFromString(str) {
+    if (str) {
+        var d = str.split(/\D/);
+        return (new Date(d[0], --d[1], d[2])).toISOString();
+    } else {
+        return "";
+    }
+}
+
+function escapeRegExp(str) {
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+}
+function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}
+
+
 function generate(template, state) {
 
-    $.each( state, function( key, value ) {
-        $('#' + key).val(value);
-    });
+    //Handle the case where odi-certificate-number has not yet been defined (to ensure it's set to display:none)
+    if (!state["odi-certificate-number"]) state["odi-certificate-number"] = "";
 
+    for (var key in state) {
+      if (state.hasOwnProperty(key)) {
+        var value = state[key];
 
-    $( INPUTS ).each(function() {
-        var id = $( this ).attr('id');
-        var value = $( this ).val();
-        if ($( this ).attr('type') == "date") {
-            var humanReadableDate = value && "";
-            var machineReadableDate = value ? document.getElementById(id).valueAsDate.toISOString() : "";
-            template = replaceAll(template,"{"+id+"-human}",humanReadableDate);
-            template = replaceAll(template,"{"+id+"-machine}",machineReadableDate);
-        } else if ($( this ).attr('id') == "odi-certificate-number") {
+        if (key == "created") {
+            var humanReadableDate = value || "";
+            var machineReadableDate = isoDateFromString(value);
+            template = replaceAll(template,"{"+key+"-human}",humanReadableDate);
+            template = replaceAll(template,"{"+key+"-machine}",machineReadableDate);
+        } else if (key == "odi-certificate-number") {
             if (value == "") {
                 template = replaceAll(template,"{odi-certificate-show}","none");
             } else {
@@ -24,21 +41,15 @@ function generate(template, state) {
             }
             template = replaceAll(template,"{odi-certificate-number}",value);
         } else {
-            template = replaceAll(template,"{"+id+"}",value);
-        }
-    });
-
-    $( "#output" ).val(template);
-}
-
-function standalone(templateFile, stateFile, outputFile) {
-    var fs = require('fs');
-    fs.writeFile("/tmp/test", "Hey there!", function(err) {
-        if(err) {
-            return console.log(err);
+            template = replaceAll(template,"{"+key+"}",value);
         }
 
-        console.log("The file was saved!");
+      }
     }
-}); 
+
+    return template;
 }
+
+//Allow this to be required by node
+var exports = module.exports = {};
+exports.generate = generate;
