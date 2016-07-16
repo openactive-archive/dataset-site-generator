@@ -9,10 +9,18 @@ git config --global push.default matching
 # clear the respec directory
 #rm -rf respec || exit 0;
 
+cd ${DIR_NAME}
 git clone "https://${GH_TOKEN}@${GH_REF}"
 cd ${REPO_NAME}
 
+echo "metadata.json"
 cat metadata.json
+echo ""
+
+git remote add upstream git@github.com:openactive/dataset-site-generator.git
+git fetch upstream
+
+
 
 exit 0
 
