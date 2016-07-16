@@ -31,9 +31,12 @@ function createEnv(name, url, token) {
 }
 
 function runDeploy(queue) {
+    // This queue processes each repo until completion
     var item = queue.pop();
     if (item) {
         console.log(chalk.cyan.bold("\nRunning deploy for: " + item.REPO_NAME));
+
+        // Need to run this async in order to pipe stdout
 
         var deploySh = execFile('sh', [ 'deploy.sh' ], {
           //cwd: process.env.PWD + '/' + dirname,
@@ -53,17 +56,6 @@ function runDeploy(queue) {
         // End of the queue
         console.log(chalk.yellow('Success!'));
         process.exit(0);
-    }
-}
-
-function flushExit( process, exitCode ) {
-    if ( process.stdout._pendingWriteReqs ) {
-        setTimeout(function() {
-            flushExit( process, exitCode );
-        }, 1 );
-    }
-    else {
-        process.exit( exitCode );
     }
 }
 
