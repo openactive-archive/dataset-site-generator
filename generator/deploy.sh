@@ -51,12 +51,12 @@ echo "Regenerating index.html..."
 echo ""
 echo "Checking if index.html has changed..."
 git add index.html
-git diff --cached --exit-code > /dev/null 2>&1
+git diff --cached --exit-code
 if [ $? -ne 0 ]; then 
   echo "There are changes"; 
-  echo ""
+  echo ""; 
   echo "Committing index.html..."; 
-  git commit -m "Regeneration of index.html by Openactive Bot"
+  git commit -m "Regeneration of index.html by Openactive Bot"; 
 else 
   echo "No changes";
 fi
