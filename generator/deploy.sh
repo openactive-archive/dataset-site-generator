@@ -51,7 +51,7 @@ echo ""
 echo "Checking if index.html has changed..."
 git add index.html
 git diff --cached --exit-code > /dev/null 2>&1
-if [ -n "$?" ]; then 
+if [ "$?" ]; then 
   echo "There are changes"; 
   echo ""
   echo "Committing index.html..."; 
@@ -59,7 +59,7 @@ if [ -n "$?" ]; then
 else 
   echo "No changes";
 fi
-
+    
 echo ""
 echo "Pushing..."
 git push
