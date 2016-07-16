@@ -48,9 +48,17 @@ echo "Regenerating index.html..."
 ../../../generator-standalone.js --template generator/template.html --metadata metadata.json --output index.html
 
 echo ""
-echo "Committing index.html..."
+echo "Checking if index.html has changed..."
 git add index.html
-git commit -m "Regeneration of index.html by Openactive Bot"
+git diff --cached --exit-code > /dev/null 2>&1
+if [ -n "$?" ]; then 
+  echo "There are changes"; 
+  echo ""
+  echo "Committing index.html..."; 
+  git commit -m "Regeneration of index.html by Openactive Bot"
+else 
+  echo "No changes";
+fi
 
 echo ""
 echo "Pushing..."
