@@ -28,8 +28,13 @@ echo metadata.json merge=pin >> .git/info/attributes
 echo images/bg.jpg merge=pin >> .git/info/attributes
 echo images/logo.png merge=pin >> .git/info/attributes
 
-git remote add upstream https://${GH_TOKEN}@github.com:openactive/dataset-site-generator.git
+echo "git remote add upstream ..."
+git remote add upstream git@github.com:openactive/dataset-site-generator.git
+
+echo "git fetch upstream ..."
 git fetch upstream
+
+echo "git pull upstream master -Xtheirs ..."
 git pull upstream master -Xtheirs
 
 echo ""
