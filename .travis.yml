@@ -2,7 +2,10 @@ sudo: false
 language: node_js
 node_js:
   - "6"
-script: bash ./deploy.sh
+script:
+- cd generator
+- npm install
+- bash ./distribute.sh
 env:
   global:
     - GH_REF: github.com/openactive/realtime-paged-data-exchange.git

@@ -13,12 +13,22 @@ cd ${DIR_NAME}
 git clone "https://${GH_TOKEN}@${GH_REF}"
 cd ${REPO_NAME}
 
+
 echo "metadata.json"
 cat metadata.json
 echo ""
+echo "Performing merge..."
+
+# Configure git's merge to permanently ignore all upstream changes to locally-changed files
+git config merge.pin.driver true
+echo index.html merge=pin >> .git/info/attributes
+echo metadata.json merge=pin >> .git/info/attributes
+echo images/bg.jpg merge=pin >> .git/info/attributes
+echo images/logo.png merge=pin >> .git/info/attributes
 
 git remote add upstream git@github.com:openactive/dataset-site-generator.git
 git fetch upstream
+git pull upstream master -Xtheirs
 
 
 
