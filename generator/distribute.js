@@ -90,7 +90,7 @@ if(!program.token) {
         url: url
     }, function(error, response, body) {
 
-        console.log("Response recieved...");
+        console.log("Response received...");
 
         if (!error && response.statusCode == 200) {
             var body = JSON.parse(body);
