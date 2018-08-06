@@ -9,7 +9,7 @@
   "created": "2014-07-20",
   "data-url": "http://api.britishcycling.com/openactive/rpde",
   "documentation-url": "https://github.com/britishcycling-oa/opendata",
-  "rpde-version": "0.2.3",
+  "rpde-version": "1.0",
   "license-name": "Creative Commons Attribution Licence (CC-BY v4.0)",
   "license-url": "https://creativecommons.org/licenses/by/4.0/",
   "attribution-text": "British Cycling Sky Ride",
