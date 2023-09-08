@@ -91,13 +91,8 @@ function metadataAccumulator(token, queue, metadataItems, metadataEnv) {
     // Sort alphabetically
     metadataItems.sortOn("title");
 
-    // End of the list, write the directory json
+    // End of the list
     console.log(chalk.magenta.bold('\nDirectory Dataset Count: ' + metadataItems.length ));
-    metadataEnv.DIRECTORY_JSON = JSON.stringify(metadataItems, null, ' ');
-    runScript(metadataEnv, 'metadata.sh', function success() {
-        console.log(chalk.yellow('\nDirectory Update Success!'));
-        process.exit(0);
-    });
   }
 }
 
